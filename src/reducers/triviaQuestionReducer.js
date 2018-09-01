@@ -7,7 +7,7 @@ import {
 
 const defaultState = { loading: false, triviaQuestions: [], userResponses: [] };
 
-export default function triviaQuestionReducer(state = [], action) {
+export default function triviaQuestionReducer(state = defaultState, action) {
   switch (action.type) {
     case GET_TRIVIA_QUESTIONS:
       return { ...state, loading: true };
