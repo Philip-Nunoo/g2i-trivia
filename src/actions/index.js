@@ -15,7 +15,7 @@ export function fetchAllTriviaQuestions(amount = 10, difficulty = "hard") {
   };
 }
 
-export const savUserResponse = response => {
+export const saveUserResponse = response => {
   return {
     type: SAVE_USER_RESPONSE,
     payload: response
