@@ -1,21 +1,36 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import SwipeCards from "react-native-swipe-cards";
-import { Loading, TriviaQuestion } from "./../components";
+import { ScreenTitle, Loading, TriviaQuestion } from "./../components";
 import { fetchAllTriviaQuestions, saveUserResponse } from "./../actions";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E0E0E0",
+    alignItems: "center"
+    // justifyContent: "center"
+  },
+  header: {
     alignItems: "center",
-    justifyContent: "center"
+    margin: 20
+  },
+  current: {
+    alignItems: "center",
+    margin: 40
+  },
+  currentText: {
+    fontSize: 24
   }
 });
 
 class QuizScreen extends Component {
   static displayName = "QuizScreen";
+  static navigationOptions = {
+    title: "Quiz"
+  };
+
   state = { currentCard: null, currentCardIdx: 0, outOfCards: false };
 
   componentDidMount() {
@@ -50,7 +65,9 @@ class QuizScreen extends Component {
 
   cardRemoved = () => {
     if (this.state.outOfCards) {
-      console.log("this.props");
+      const { navigation: { navigate } = {} } = this.props;
+
+      navigate("Result");
     }
   };
 
@@ -59,15 +76,20 @@ class QuizScreen extends Component {
       loading,
       triviaQuestions,
       numberOfQuestions,
+
       ...props
     } = this.props;
-    const { currentCard, currentCardIdx, outOfCards } = this.state;
+    const { currentCard, currentCardIdx } = this.state;
 
     return loading ? (
       <Loading />
     ) : (
       <View style={styles.container}>
-        {this.state.currentCard && <Text>{currentCard.category}</Text>}
+        <View style={styles.header}>
+          {this.state.currentCard && (
+            <ScreenTitle>{currentCard.category}</ScreenTitle>
+          )}
+        </View>
         <SwipeCards
           currentCard={this.currentCard}
           cards={triviaQuestions}
@@ -83,10 +105,11 @@ class QuizScreen extends Component {
           nopeText="False"
           cardRemoved={this.cardRemoved}
         />
-        <Text>
-          {currentCardIdx + 1} of {triviaQuestions.length}
-        </Text>
-        {outOfCards && <Text>Last</Text>}
+        <View style={styles.current}>
+          <Text style={styles.currentText}>
+            {currentCardIdx + 1} of {triviaQuestions.length}
+          </Text>
+        </View>
       </View>
     );
   }
